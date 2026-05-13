@@ -1,22 +1,23 @@
-yaml
-    name: Pruebas de Integracion Continua
+name: Pruebas de Integracion Continua
 
-    # Este robot se activa cada vez que haces un 'push' a la rama principal
-    on:
-      push:
-        branches: [ main ]
+on:
+  push:
+    branches: [ main ]
 
-    jobs:
-      verificar-conexion:
-        runs-on: ubuntu-latest # GitHub nos presta una computadora con Linux gratis
+jobs:
+  verificar-conexion:
+    runs-on: ubuntu-latest
 
-        steps:
-          - name: Descargar el codigo del repositorio
-            uses: actions/checkout@v4
+    steps:
+      - name: Descargar el codigo del repositorio
+        uses: actions/checkout@v4
 
-          - name: Levantar los contenedores de Docker
-            run: docker compose up -d
+      - name: Levantar los contenedores de Docker
+        run: docker compose up -d
 
-          - name: Ejecutar prueba de comunicacion (Ping)
-            # Le pedimos al cliente que le mande 4 mensajes al servidor
-            run: docker exec contenedor_dos ping -c 4 app_servidor
+      - name: Esperar a que los contenedores arranquen
+        # Esto le da tiempo a la red interna de Docker para estabilizarse
+        run: sleep 10
+
+      - name: Ejecutar prueba de comunicacion (Ping)
+        run: docker exec contenedor_dos ping -c 4 app_servidor
