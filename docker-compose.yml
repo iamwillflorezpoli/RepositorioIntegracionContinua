@@ -1,0 +1,1 @@
+"services:  app_servidor:    image: alpine    container_name: contenedor_uno    command: sleep infinity  app_cliente:    image: alpine    container_name: contenedor_dos    command: sleep infinity    depends_on:      - app_servidor" 
